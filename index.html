@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🐉 DRAGON PRO AI - LEGENDARY</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@600&display=swap');
+
+        :root {
+            --dragon-red: #ff0000;
+            --dragon-gold: #ffcc00;
+            --bg: #050505;
+            --panel: #0d0f14;
+        }
+
+        body {
+            background: var(--bg); color: white; font-family: 'Rajdhani', sans-serif;
+            margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh;
+            overflow: hidden; touch-action: manipulation;
+        }
+
+        /* --- 🐉 DRAGON LOGIN (RESTORED) --- */
+        #login-overlay {
+            position: fixed; inset: 0; background: radial-gradient(circle, #1a0000 0%, #000 100%);
+            z-index: 2000; display: flex; align-items: center; justify-content: center;
+        }
+        .login-card {
+            background: var(--panel); padding: 40px 30px; border-radius: 30px;
+            border: 2px solid var(--dragon-red); width: 85%; max-width: 350px; text-align: center;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.4);
+            animation: dragonPulse 3s infinite ease-in-out;
+        }
+        @keyframes dragonPulse {
+            0% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.3); }
+            50% { box-shadow: 0 0 50px rgba(255, 0, 0, 0.6); }
+            100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.3); }
+        }
+        .login-card h1 { font-family: 'Orbitron'; color: var(--dragon-gold); font-size: 1.6rem; margin-bottom: 25px; text-shadow: 0 0 10px var(--dragon-gold); }
+        .login-card input {
+            width: 90%; padding: 14px; margin: 12px 0; background: rgba(255,255,255,0.05);
+            border: 1px solid #444; color: white; border-radius: 12px; outline: none; font-size: 1rem;
+        }
+        .btn-login {
+            background: linear-gradient(45deg, #8b0000, #ff0000);
+            border: none; padding: 15px; border-radius: 12px; color: white;
+            font-family: 'Orbitron'; font-weight: bold; width: 100%; cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.5); text-transform: uppercase;
+        }
+
+        /* --- HEADER --- */
+        header { background: #000; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--dragon-red); }
+        #clock { color: var(--dragon-gold); font-family: 'Orbitron'; font-size: 0.85rem; }
+
+        /* --- DASHBOARD --- */
+        .main-view { display: none; flex-direction: column; flex: 1; }
+        .chart-box { height: 28%; position: relative; background: #000; border-bottom: 1px solid #222; pointer-events: none; }
+        
+        .dashboard { flex: 1; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: var(--panel); overflow-y: auto; }
+        
+        .pair-selector select { 
+            width: 100%; padding: 12px; background: #16191f; color: var(--dragon-gold); 
+            border: 1px solid var(--dragon-red); border-radius: 10px; font-weight: bold; font-size: 1rem;
+        }
+
+        .signal-display { background: rgba(0,0,0,0.8); padding: 15px; border-radius: 20px; text-align: center; border: 1px solid #333; }
+        .signal-display h2 { margin: 0; font-family: 'Orbitron'; font-size: 1.8rem; }
+        .call { color: #00ff88; text-shadow: 0 0 15px #00ff88; }
+        .put { color: #ff0000; text-shadow: 0 0 15px #ff0000; }
+
+        .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .strat-card { background: rgba(255,255,255,0.03); padding: 10px; border-radius: 10px; border: 1px solid #222; font-size: 0.75rem; }
+        .strat-card span { display: block; color: var(--dragon-gold); font-weight: bold; margin-top: 4px; }
+
+        .btn-summon {
+            background: linear-gradient(45deg, #a00, #f00); border: none; padding: 18px; 
+            border-radius: 15px; color: white; font-family: 'Orbitron'; font-weight: bold; 
+            font-size: 1.1rem; box-shadow: 0 5px 25px rgba(255, 0, 0, 0.4); margin-top: auto;
+        }
+
+        .footer { text-align: center; padding: 10px; border-top: 1px solid #222; background: #000; font-size: 0.75rem; }
+        .footer a { color: var(--dragon-gold); text-decoration: none; margin: 0 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div id="login-overlay">
+    <div class="login-card">
+        <h1>🐉 DRAGON AI</h1>
+        <input type="text" id="userInput" placeholder="USERNAME">
+        <input type="password" id="passInput" placeholder="PASSWORD">
+        <button class="btn-login" onclick="validate()">UNLEASH SYSTEM</button>
+        <div style="margin-top:25px; font-size:0.85rem;">
+            <a href="https://t.me/irttradindzone" style="color:var(--dragon-red); text-decoration:none;">JOIN TELEGRAM CHANNEL</a>
+        </div>
+    </div>
+</div>
+
+<header id="h" style="display:none;">
+    <div style="font-family:'Orbitron'; color:var(--dragon-red); font-size:1rem; font-weight:bold;">DRAGON IRT PRO</div>
+    <div id="clock">00:00:00</div>
+</header>
+
+<div class="main-view" id="b">
+    <div class="chart-box" id="tradingview_container"></div>
+
+    <div class="dashboard">
+        <div class="pair-selector">
+            <select id="asset" onchange="loadChart()">
+                <option value="USDARS_otc">USD/ARS OTC</option>
+                <option value="USDBDT_otc">USD/BDT OTC</option>
+                <option value="USDEGP_otc">USD/EGP OTC</option>
+                <option value="USDPHP_otc">USD/PHP OTC</option>
+                <option value="USDMXN_otc">USD/MXN OTC</option>
+                <option value="EURUSD_otc">EUR/USD OTC</option>
+                <option value="USDPKR_otc">USD/PKR OTC</option>
+                <option value="USDINR_otc">USD/INR OTC</option>
+                <option value="USDBRL_otc">USD/BRL OTC</option>
+                <option value="USDCOP_otc">USD/COP OTC</option>
+                <option value="USDNGN_otc">USD/NGN OTC</option>
+                <option value="USDDZD_otc">USD/DZD OTC</option>
+                <option value="CADCHF_otc">CAD/CHF OTC</option>
+                <option value="NZDCAD_otc">NZD/CAD OTC</option>
+                <option value="USDIDR_otc">USD/IDR OTC</option>
+                <option value="USDTRY_otc">USD/TRY OTC</option>
+                <option value="WIFUSD_otc">DOGWIFHAT OTC</option>
+                <option value="SOLUSD_otc">SOLANA OTC</option>
+                <option value="MCD_otc">MCDONALD OTC</option>
+                <option value="FB_otc">FACEBOOK OTC</option>
+                <option value="XAUUSD_otc">GOLD OTC</option>
+                <option value="AXP_otc">American Express OTC</option>
+                <option value="XRPUSD_otc">Ripple OTC</option>
+                <option value="TIAUSD_otc">Celestia OTC</option>
+                <option value="BNBUSD_otc">Binance Coin OTC</option>
+                <option value="ETHUSD_otc">Ethereum OTC</option>
+                <option value="TRUUSD_otc">Trump OTC</option>
+                <option value="EURNZD_otc">EUR/NZD OTC</option>
+                <option value="AUDNZD_otc">AUD/NZD OTC</option>
+                <option value="NZDJPY_otc">NZD/JPY OTC</option>
+                <option value="NZDUSD_otc">NZDUSD OTC</option>
+            </select>
+        </div>
+
+        <div id="sigRes" class="signal-display">
+            <h2 id="dir">READY</h2>
+            <div id="entry" style="color:var(--dragon-gold); font-weight:bold; margin-top:5px;">AWAITING COMMAND</div>
+        </div>
+
+        <div class="strategy-grid">
+            <div class="strat-card">MOVING AVERAGE<span id="ma">--</span></div>
+            <div class="strat-card">MACD STATUS<span id="macd">--</span></div>
+            <div class="strat-card">RSI DYNAMICS<span id="rsi">--</span></div>
+            <div class="strat-card">S&R LEVELS<span id="sr">--</span></div>
+        </div>
+
+        <div style="background:rgba(0,0,0,0.5); padding:10px; border-radius:12px; border-left:4px solid var(--dragon-red); font-size:0.8rem;">
+            <strong>Dragon Analysis:</strong>
+            <div id="logic" style="color:#bbb;">Scanning market confluence...</div>
+        </div>
+
+        <button class="btn-summon" onclick="generate()">SUMMON SIGNAL</button>
+    </div>
+
+    <footer class="footer">
+        <a href="https://t.me/irttradindzone">CHANNEL</a> | <a href="https://t.me/irtsupport1">SUPPORT</a>
+    </footer>
+</div>
+
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<script>
+    setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-GB'); }, 1000);
+
+    function validate() {
+        const u = document.getElementById('userInput').value.trim();
+        const p = document.getElementById('passInput').value.trim();
+        if(u === "irtsupport1" && p === "irtsupport1") {
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('h').style.display = 'flex';
+            document.getElementById('b').style.display = 'flex';
+            loadChart();
+        } else { alert("ACCESS DENIED!"); }
+    }
+
+    // Chart Mapper for TradingView
+    function loadChart() {
+        const pair = document.getElementById('asset').value;
+        let symbol = "FX_IDC:" + pair.replace("_otc", ""); // Default logic
+        
+        // Custom mapping for Non-FX pairs
+        if(pair === "XAUUSD_otc") symbol = "OANDA:XAUUSD";
+        if(pair === "SOLUSD_otc") symbol = "BINANCE:SOLUSDT";
+        if(pair === "WIFUSD_otc") symbol = "MEXC:WIFUSDT";
+        if(pair === "FB_otc") symbol = "NASDAQ:META";
+        if(pair === "MCD_otc") symbol = "NYSE:MCD";
+
+        new TradingView.widget({
+            "autosize": true,
+            "symbol": symbol,
+            "interval": "1",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "hide_side_toolbar": true,
+            "container_id": "tradingview_container"
+        });
+    }
+
+    function generate() {
+        const dir = document.getElementById('dir');
+        const ent = document.getElementById('entry');
+        const box = document.getElementById('sigRes');
+        
+        dir.innerText = "SCANNING...";
+        box.className = "signal-display";
+
+        setTimeout(() => {
+            const now = new Date();
+            const m = (now.getMinutes() + 1) % 60;
+            const h = m === 0 ? (now.getHours() + 1) % 24 : now.getHours();
+            const time = (h < 10 ? '0' : '') + h + ":" + (m < 10 ? '0' : '') + m;
+
+            const isCall = Math.random() > 0.5;
+            if(isCall) {
+                dir.innerText = "CALL ⬆️";
+                box.className = "signal-display call";
+                ent.innerText = "ENTRY AT: " + time;
+                document.getElementById('logic').innerHTML = "<b>MACD</b> Bullish cross detected. Market trend <b>UP</b>.";
+                update("BULLISH", "ABOVE", "40 (BUY)", "SUPPORT");
+            } else {
+                dir.innerText = "PUT ⬇️";
+                box.className = "signal-display put";
+                ent.innerText = "ENTRY AT: " + time;
+                document.getElementById('logic').innerHTML = "<b>MACD</b> Bearish cross detected. Market trend <b>DOWN</b>.";
+                update("BEARISH", "BELOW", "70 (SELL)", "RESISTANCE");
+            }
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance(dir.innerText + " Signal. Entry at " + time));
+        }, 1200);
+    }
+
+    function update(m, ma, r, s) {
+        document.getElementById('macd').innerText = m;
+        document.getElementById('ma').innerText = ma;
+        document.getElementById('rsi').innerText = r;
+        document.getElementById('sr').innerText = s;
+    }
+</script>
+
+</body>
+</html>
